@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace EX
 {
@@ -83,83 +84,70 @@ namespace EX
             }
         }
 
+        // Нажатие кнопки отправить и последующий вывод информации.
         private void send_button_Click(object sender, EventArgs e)
         {
-            //Нажатие кнопки отправить и последующий вывод информации
             DialogResult Send = MessageBox.Show("Вы точно хотите сохранить результат?", "Предупреждение!",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (Send == DialogResult.Yes)
             {
-                //Рег.Выражения для обработки строк с масками
-                string bik = (@"\d{2}-\d{2}-\d{2}-\d{3}");
-                string inn1 = (@"\d{10}");
-                string inn2 = (@"\d{12}");
-                string chet = (@"\d{4}-\d{4}-\d{4}-\d{4}-\d{4}");
+                People_plata people = new People_plata();
 
-                bool vvod = false;
-                //Проверка на наличие пустых строк
-                foreach (Control c in Controls)
+                List<string> text = new List<string> { vvod_plat.Text, vvod_summ.Text,
+                    vvod_bank.Text, vvod_BIK.Text, vvod_INN.Text, vvod_bank_pol.Text, vvod_chet_pol.Text};
+
+                if (people.Proverka(text))
                 {
-                    if (c is TextBox)
-                        if (((TextBox)c).Text != "")
-                            ((TextBox)c).ReadOnly = true;
-                        else
-                        {
-                            MessCaan(); break;
-                        }
-                    if (c is ComboBox)
-                        if (((ComboBox)c).Text != "")
-                            ((ComboBox)c).Enabled = false;
-                        else
-                        {
-                            MessCaan(); break;
-                        }
-                    if (Regex.IsMatch(vvod_BIK.Text,bik)) 
-                        vvod_BIK.ReadOnly = true;
-                    else
+                    foreach (Control c in Controls)
                     {
-                        MessCaan(); break;
-                    }
-                    if (Regex.IsMatch(vvod_INN.Text, inn1) || Regex.IsMatch(vvod_INN.Text, inn2))
-                    {
-                        vvod_INN.ReadOnly = true;
-                        urface_radiob.Enabled = false;
-                        predprin_radiob.Enabled = false;
+                        if (c is TextBox) ((TextBox)c).Enabled = false;
+                        if (c is MaskedTextBox) ((MaskedTextBox)c).Enabled = false;
+                        if (c is ComboBox) ((ComboBox)c).Enabled = false;
+                        if (c is RadioButton) ((RadioButton)c).Enabled = false;
                         X_button.Enabled = false;
                     }
-                    else
-                    {
-                        MessCaan(); break;
-                    }
-                    if (Regex.IsMatch(vvod_chet_pol.Text, chet)) 
-                        vvod_chet_pol.ReadOnly = true;
-                    else
-                    {
-                        MessCaan();
-                        break;
-                    }
-                    vvod = true;
+                    people.Info(text);
                 }
-                //Вывод ошибки
-                void MessCaan()
-                {
-                    MessageBox.Show("Введите все поля!", "Ошибка",
+                else MessageBox.Show("Введите все поля!", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                //Вывод информации
-                if (vvod == true)
-                {
-                    candel_button.Enabled = false;
-                    MessageBox.Show($"Плательщик: {vvod_plat.Text}\n" +
-                        $"Сумма: {vvod_summ.Text} руб\n" +
-                        $"Банк плательщика: {vvod_bank.Text}\n" +
-                        $"БИК: {vvod_BIK.Text}\n" +
-                        $"ИНН: {vvod_INN}\n" +
-                        $"Банк получателя: {vvod_bank_pol.Text}\n" +
-                        $"Счет (пол): {vvod_chet_pol.Text}", "Итог");
-                }
             }
         }
+    }
 
+    class People_plata
+    {
+    /// <summary>
+    /// Класс проверки строк и вывода информации.
+    /// </summary>
+
+        string bik = (@"\d{2}-\d{2}-\d{2}-\d{3}");
+        string inn1 = (@"\d{10}");
+        string inn2 = (@"\d{12}");
+        string chet = (@"\d{4}-\d{4}-\d{4}-\d{4}-\d{4}");
+
+        public bool Proverka(List<string> text)
+        {
+            if ((!string.IsNullOrWhiteSpace(text[0])) && 
+                (!string.IsNullOrWhiteSpace(text[1])) &&
+                (!string.IsNullOrWhiteSpace(text[2])) &&
+                (Regex.IsMatch(text[3], bik)) &&
+                ((Regex.IsMatch(text[4], inn1)) || (Regex.IsMatch(text[4], inn2))) &&
+                (!string.IsNullOrWhiteSpace(text[5])) &&
+                (Regex.IsMatch(text[6], chet)))
+                return true;
+            else
+                return false;
+        }
+
+        public void Info(List<string> text)
+        {
+            DialogResult pow = MessageBox.Show($"Плательщик: {text[0]}\n" +
+                $"Сумма: {text[1]}\n" +
+                $"Банк плательщика: {text[2]}\n" +
+                $"БИК: {text[3]}\n" +
+                $"ИНН: {text[4]}\n" +
+                $"Банк получателя: {text[5]}\n" +
+                $"Счет (пол): {text[6]}", "Итог", MessageBoxButtons.RetryCancel);
+        }
     }
 }
