@@ -49,13 +49,15 @@
             this.candel_button = new System.Windows.Forms.Button();
             this.X_button = new System.Windows.Forms.Button();
             this.vvod_summ = new System.Windows.Forms.TextBox();
+            this.DATA = new System.Windows.Forms.Label();
+            this.TEXT_NOM = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // text_plat_porych
             // 
             this.text_plat_porych.AutoSize = true;
             this.text_plat_porych.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.text_plat_porych.Location = new System.Drawing.Point(41, 32);
+            this.text_plat_porych.Location = new System.Drawing.Point(26, 32);
             this.text_plat_porych.Name = "text_plat_porych";
             this.text_plat_porych.Size = new System.Drawing.Size(169, 13);
             this.text_plat_porych.TabIndex = 0;
@@ -254,11 +256,30 @@
             this.vvod_summ.TabIndex = 10;
             this.vvod_summ.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.vvod_summ_KeyPress);
             // 
+            // DATA
+            // 
+            this.DATA.AutoSize = true;
+            this.DATA.Location = new System.Drawing.Point(14, 340);
+            this.DATA.Name = "DATA";
+            this.DATA.Size = new System.Drawing.Size(0, 13);
+            this.DATA.TabIndex = 21;
+            // 
+            // TEXT_NOM
+            // 
+            this.TEXT_NOM.AutoSize = true;
+            this.TEXT_NOM.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TEXT_NOM.Location = new System.Drawing.Point(198, 32);
+            this.TEXT_NOM.Name = "TEXT_NOM";
+            this.TEXT_NOM.Size = new System.Drawing.Size(0, 13);
+            this.TEXT_NOM.TabIndex = 22;
+            // 
             // form_plata
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(252, 349);
+            this.ClientSize = new System.Drawing.Size(252, 361);
+            this.Controls.Add(this.TEXT_NOM);
+            this.Controls.Add(this.DATA);
             this.Controls.Add(this.X_button);
             this.Controls.Add(this.candel_button);
             this.Controls.Add(this.send_button);
@@ -310,6 +331,8 @@
         private System.Windows.Forms.Button candel_button;
         private System.Windows.Forms.Button X_button;
         private System.Windows.Forms.TextBox vvod_summ;
+        private System.Windows.Forms.Label DATA;
+        private System.Windows.Forms.Label TEXT_NOM;
     }
 }
 
